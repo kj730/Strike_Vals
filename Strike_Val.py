@@ -1,3 +1,4 @@
+#!/usr/bin/python
 import sys
 import numpy as np
 DATE_COL = 9
@@ -19,18 +20,17 @@ def Strike_Value(filename, year, month):
         print("Unable to open File")
         return -1
     for line in filer:
-        splitter = line.split('|')
+        pound_pos = line.find('#')
+        newLine = line[:pound_pos]
+        splitter = newLine.split('|')
         if splitter[LINE_COL] == "1":
             continue
         if splitter[DATE_COL] == month + "/" + year:
             if len(combineArr) == 0:
-                #strikeArr = splitter[SV_COL].split(':')
-                #combineArr = strikeArr
                 combineArr = splitter[SV_COL].split(':')
             else:
                 tempArr = splitter[SV_COL].split(':')
                 combineArr += tempArr
-                #combineArr = np.concatenate(strikeArr, tempArr)
     filer.close()
     return combineArr
 
@@ -40,10 +40,7 @@ def format_output(data):
     for x in data:
         arr = x.split('/')
         value = arr[VALUE_COL]
-        checker = arr[VALUE_COL]
-        if value.endswith("#"):
-            checker = value.rstrip(value[-1])
-        print("Strike" + " = " + arr[STRIKE_COL] + "\tValue" + " = " + checker)
+        print("Strike = " + arr[STRIKE_COL] + "\tValue = " + value)
         count = count + 1
 def main():
     if len(sys.argv) < 3:
