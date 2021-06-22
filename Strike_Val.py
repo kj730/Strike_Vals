@@ -6,7 +6,7 @@ SV_COL = 11
 STRIKE_COL = 0
 VALUE_COL = 1
 LINE_COL = 7
-
+#finds the strike value of a given file
 def Strike_Value(filename, year, month):
     strikeArr = []
     tempArr = []
@@ -25,15 +25,17 @@ def Strike_Value(filename, year, month):
         splitter = newLine.split('|')
         if splitter[LINE_COL] == "1":
             continue
+        #adds strikes to an array if they are in the correct month
         if splitter[DATE_COL] == month + "/" + year:
             if len(combineArr) == 0:
                 combineArr = splitter[SV_COL].split(':')
+            #combines teh array if there is already one with data in it    
             else:
                 tempArr = splitter[SV_COL].split(':')
                 combineArr += tempArr
     filer.close()
     return combineArr
-
+#formats the output to be easier to read
 def format_output(data):
     count = 1
     checker = ""
@@ -42,6 +44,7 @@ def format_output(data):
         value = arr[VALUE_COL]
         print("Strike = " + arr[STRIKE_COL] + "\tValue = " + value)
         count = count + 1
+        
 def main():
     if len(sys.argv) < 3:
         print("Usage: ", sys.argv[0], "Filename Year Month")
